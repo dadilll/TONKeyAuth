@@ -1,0 +1,371 @@
+definitions:
+  dto.AuthorizeResponseDTO:
+    properties:
+      challenge:
+        example: nonce1234567890
+        type: string
+      client_id:
+        example: abc123def456
+        type: string
+      expiresAt:
+        example: "2025-09-07T00:00:00Z"
+        type: string
+      redirect_uri:
+        example: https://example.com/callback
+        type: string
+    type: object
+  dto.JWK:
+    properties:
+      alg:
+        example: RS256
+        type: string
+      e:
+        example: AQAB
+        type: string
+      kid:
+        example: key1
+        type: string
+      kty:
+        example: RSA
+        type: string
+      "n":
+        example: 0vx7agoebGcQSuuPiLJXZptNnP9Z...
+        type: string
+      use:
+        example: sig
+        type: string
+    required:
+    - alg
+    - e
+    - kid
+    - kty
+    - "n"
+    - use
+    type: object
+  dto.JWKSResponseDTO:
+    properties:
+      keys:
+        items:
+          $ref: '#/definitions/dto.JWK'
+        type: array
+    required:
+    - keys
+    type: object
+  dto.TokenRequestDTO:
+    properties:
+      message:
+        example: TON OAuth challenge message
+        type: string
+      publicKey:
+        example: dGVzdF9wdWJsaWNfa2V5X2RhdGE=
+        type: string
+      signature:
+        example: c2lnbmF0dXJlX2RhdGFfYmFzZTY0X2Zvcm1hdA==
+        type: string
+    required:
+    - message
+    - publicKey
+    - signature
+    type: object
+  dto.TokenResponseDTO:
+    properties:
+      jwt:
+        example: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9...
+        type: string
+    required:
+    - jwt
+    type: object
+  dto.VerifyResponseDTO:
+    properties:
+      expiresAt:
+        example: "2025-09-07T00:00:00Z"
+        type: string
+      issuer:
+        example: TON OAuth Service
+        type: string
+      nonce:
+        example: nonce1234567890
+        type: string
+      valid:
+        example: true
+        type: boolean
+      wallet:
+        example: EQC1234567890abcdef...
+        type: string
+    type: object
+  dto.VerifyTokenRequestDTO:
+    properties:
+      jwt:
+        example: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9...
+        type: string
+    type: object
+  dto.VerifyTokenResponseDTO:
+    properties:
+      exp:
+        example: 1751913600
+        type: integer
+      issuer:
+        example: TON OAuth Service
+        type: string
+      valid:
+        example: true
+        type: boolean
+    type: object
+info:
+  contact: {}
+paths:
+  /oauth/authorize:
+    get:
+      consumes:
+      - application/json
+      description: Generate a one-time nonce for TON OAuth.
+      parameters:
+      - description: Redirect URI
+        in: query
+        name: redirect_uri
+        required: true
+        type: string
+      - description: Scope
+        in: query
+        name: scope
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.AuthorizeResponseDTO'
+        "400":
+          description: Bad request, invalid parameters
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "403":
+          description: Forbidden
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Generate authorization challenge
+      tags:
+      - auth
+  /oauth/jwks:
+    get:
+      description: Get public keys to verify JWT tokens issued by TON OAuth.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.JWKSResponseDTO'
+        "400":
+          description: Bad request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "403":
+          description: Forbidden
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get JSON Web Key Set (JWKS)
+      tags:
+      - jwks
+  /oauth/token:
+    post:
+      consumes:
+      - application/json
+      description: Create JWT after successful verification of TON wallet.
+      parameters:
+      - description: Token request
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/dto.TokenRequestDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.TokenResponseDTO'
+        "400":
+          description: Bad request, invalid body
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized, verification failed
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "403":
+          description: Forbidden
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Create JWT token
+      tags:
+      - auth
+  /oauth/verify:
+    post:
+      consumes:
+      - application/json
+      description: Verify signed message from TON wallet using ed25519.
+      parameters:
+      - description: Verify request
+        in: body
+        name: body
+        required: true
+        schema:
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.VerifyResponseDTO'
+        "400":
+          description: Bad request, invalid body
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized, signature invalid
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "403":
+          description: Forbidden
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Verify TON wallet signature
+      tags:
+      - auth
+  /oauth/verify-token:
+    post:
+      consumes:
+      - application/json
+      description: Verify JWT issued by TON OAuth service.
+      parameters:
+      - description: Token request
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/dto.VerifyTokenRequestDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.VerifyTokenResponseDTO'
+        "400":
+          description: Bad request, invalid body
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized, token invalid
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "403":
+          description: Forbidden
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Verify JWT token
+      tags:
+      - auth
+swagger: "2.0"

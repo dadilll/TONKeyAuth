@@ -1,0 +1,552 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "contact": {}
+    },
+    "paths": {
+        "/oauth/authorize": {
+            "get": {
+                "description": "Generate a one-time nonce for TON OAuth.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Generate authorization challenge",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Redirect URI",
+                        "name": "redirect_uri",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Scope",
+                        "name": "scope",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.AuthorizeResponseDTO"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request, invalid parameters",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/oauth/jwks": {
+            "get": {
+                "description": "Get public keys to verify JWT tokens issued by TON OAuth.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "jwks"
+                ],
+                "summary": "Get JSON Web Key Set (JWKS)",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.JWKSResponseDTO"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/oauth/token": {
+            "post": {
+                "description": "Create JWT after successful verification of TON wallet.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Create JWT token",
+                "parameters": [
+                    {
+                        "description": "Token request",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.TokenRequestDTO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.TokenResponseDTO"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request, invalid body",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized, verification failed",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/oauth/verify": {
+            "post": {
+                "description": "Verify signed message from TON wallet using ed25519.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Verify TON wallet signature",
+                "parameters": [
+                    {
+                        "description": "Verify request",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.VerifyResponseDTO"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request, invalid body",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized, signature invalid",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/oauth/verify-token": {
+            "post": {
+                "description": "Verify JWT issued by TON OAuth service.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Verify JWT token",
+                "parameters": [
+                    {
+                        "description": "Token request",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.VerifyTokenRequestDTO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.VerifyTokenResponseDTO"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request, invalid body",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized, token invalid",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "dto.AuthorizeResponseDTO": {
+            "type": "object",
+            "properties": {
+                "challenge": {
+                    "type": "string",
+                    "example": "nonce1234567890"
+                },
+                "client_id": {
+                    "type": "string",
+                    "example": "abc123def456"
+                },
+                "expiresAt": {
+                    "type": "string",
+                    "example": "2025-09-07T00:00:00Z"
+                },
+                "redirect_uri": {
+                    "type": "string",
+                    "example": "https://example.com/callback"
+                }
+            }
+        },
+        "dto.JWK": {
+            "type": "object",
+            "required": [
+                "alg",
+                "e",
+                "kid",
+                "kty",
+                "n",
+                "use"
+            ],
+            "properties": {
+                "alg": {
+                    "type": "string",
+                    "example": "RS256"
+                },
+                "e": {
+                    "type": "string",
+                    "example": "AQAB"
+                },
+                "kid": {
+                    "type": "string",
+                    "example": "key1"
+                },
+                "kty": {
+                    "type": "string",
+                    "example": "RSA"
+                },
+                "n": {
+                    "type": "string",
+                    "example": "0vx7agoebGcQSuuPiLJXZptNnP9Z..."
+                },
+                "use": {
+                    "type": "string",
+                    "example": "sig"
+                }
+            }
+        },
+        "dto.JWKSResponseDTO": {
+            "type": "object",
+            "required": [
+                "keys"
+            ],
+            "properties": {
+                "keys": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.JWK"
+                    }
+                }
+            }
+        },
+        "dto.TokenRequestDTO": {
+            "type": "object",
+            "required": [
+                "message",
+                "publicKey",
+                "signature"
+            ],
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "TON OAuth challenge message"
+                },
+                "publicKey": {
+                    "type": "string",
+                    "example": "dGVzdF9wdWJsaWNfa2V5X2RhdGE="
+                },
+                "signature": {
+                    "type": "string",
+                    "example": "c2lnbmF0dXJlX2RhdGFfYmFzZTY0X2Zvcm1hdA=="
+                }
+            }
+        },
+        "dto.TokenResponseDTO": {
+            "type": "object",
+            "required": [
+                "jwt"
+            ],
+            "properties": {
+                "jwt": {
+                    "type": "string",
+                    "example": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9..."
+                }
+            }
+        },
+        "dto.VerifyResponseDTO": {
+            "type": "object",
+            "properties": {
+                "expiresAt": {
+                    "type": "string",
+                    "example": "2025-09-07T00:00:00Z"
+                },
+                "issuer": {
+                    "type": "string",
+                    "example": "TON OAuth Service"
+                },
+                "nonce": {
+                    "type": "string",
+                    "example": "nonce1234567890"
+                },
+                "valid": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "wallet": {
+                    "type": "string",
+                    "example": "EQC1234567890abcdef..."
+                }
+            }
+        },
+        "dto.VerifyTokenRequestDTO": {
+            "type": "object",
+            "properties": {
+                "jwt": {
+                    "type": "string",
+                    "example": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9..."
+                }
+            }
+        },
+        "dto.VerifyTokenResponseDTO": {
+            "type": "object",
+            "properties": {
+                "exp": {
+                    "type": "integer",
+                    "example": 1751913600
+                },
+                "issuer": {
+                    "type": "string",
+                    "example": "TON OAuth Service"
+                },
+                "valid": {
+                    "type": "boolean",
+                    "example": true
+                }
+            }
+        }
+    }
+}
