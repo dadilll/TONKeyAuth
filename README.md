@@ -110,3 +110,8 @@ Planned Features & Improvements for TON OAuth Service
 - [ ] **Replay Attack Protection**
 - [ ] **Retry / Rate-limiting**
 - [ ] **Key Security**
+
+
+## 📝 License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
