@@ -16,7 +16,7 @@ type Config struct {
 
 func New() *Config {
 	cfg := Config{}
-	err := cleanenv.ReadConfig("/home/danil/Project/TONAuth/conf/conf.env", &cfg)
+	err := cleanenv.ReadConfig("conf/conf.env", &cfg)
 	if err != nil {
 		fmt.Printf("Ошибка чтения конфигурации: %v\n", err)
 		return nil

@@ -3,6 +3,7 @@ package usecase
 import (
 	"TON/internal/dto"
 	"TON/pkg/logger"
+	"TON/pkg/tonwallet"
 	"context"
 	"crypto/ed25519"
 	"crypto/sha256"
@@ -19,16 +20,18 @@ type VerifyUseCase interface {
 }
 
 type VerifyUseCaseImpl struct {
-	Issuer string
-	TTL    time.Duration
-	log    logger.Logger
+	Issuer  string
+	TTL     time.Duration
+	log     logger.Logger
+	checker *tonwallet.WalletChecker
 }
 
-func NewVerifyUseCase(issuer string, ttl time.Duration, log logger.Logger) VerifyUseCase {
+func NewVerifyUseCase(issuer string, ttl time.Duration, log logger.Logger, checker *tonwallet.WalletChecker) VerifyUseCase {
 	return &VerifyUseCaseImpl{
-		Issuer: issuer,
-		TTL:    ttl,
-		log:    log,
+		Issuer:  issuer,
+		TTL:     ttl,
+		log:     log,
+		checker: checker,
 	}
 }
 
@@ -46,8 +49,7 @@ func (u *VerifyUseCaseImpl) Verify(req dto.VerifyRequestDTO) (*dto.VerifyRespons
 		u.log.Error(ctx, "Invalid message format")
 		return nil, errors.New("invalid message format, expected 'issuer:timestamp'")
 	}
-	issuer := parts[0]
-	tsStr := parts[1]
+	issuer, tsStr := parts[0], parts[1]
 
 	if issuer != u.Issuer {
 		u.log.Error(ctx, fmt.Sprintf("Invalid issuer: got %s, expected %s", issuer, u.Issuer))
@@ -73,7 +75,17 @@ func (u *VerifyUseCaseImpl) Verify(req dto.VerifyRequestDTO) (*dto.VerifyRespons
 	hash := sha256.Sum256(req.PublicKey)
 	tonAddr := address.NewAddress(0, 0, hash[:]).String()
 
-	u.log.Info(ctx, "Signature verification successful for wallet "+tonAddr)
+	active, err := u.checker.IsWalletActive(ctx, tonAddr)
+	if err != nil {
+		u.log.Error(ctx, "Failed to check wallet activity: "+err.Error())
+		return nil, fmt.Errorf("failed to check wallet activity: %w", err)
+	}
+	if !active {
+		u.log.Error(ctx, "Wallet is not active: "+tonAddr)
+		return nil, errors.New("wallet is not active")
+	}
+
+	u.log.Info(ctx, "Signature and wallet verification successful for wallet "+tonAddr)
 
 	return &dto.VerifyResponseDTO{
 		Valid:     true,

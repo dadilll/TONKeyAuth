@@ -51,48 +51,33 @@ const docTemplate = `{
                         }
                     },
                     "400": {
-                        "description": "Bad request, invalid parameters",
+                        "description": "Validation failed",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
+                            "$ref": "#/definitions/dto.ErrorResponseDTO"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
+                            "$ref": "#/definitions/dto.ErrorResponseDTO"
                         }
                     },
                     "403": {
                         "description": "Forbidden",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
+                            "$ref": "#/definitions/dto.ErrorResponseDTO"
                         }
                     },
                     "404": {
                         "description": "Not found",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
+                            "$ref": "#/definitions/dto.ErrorResponseDTO"
                         }
                     },
                     "500": {
                         "description": "Internal server error",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
+                            "$ref": "#/definitions/dto.ErrorResponseDTO"
                         }
                     }
                 }
@@ -118,46 +103,31 @@ const docTemplate = `{
                     "400": {
                         "description": "Bad request",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
+                            "$ref": "#/definitions/dto.ErrorResponseDTO"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
+                            "$ref": "#/definitions/dto.ErrorResponseDTO"
                         }
                     },
                     "403": {
                         "description": "Forbidden",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
+                            "$ref": "#/definitions/dto.ErrorResponseDTO"
                         }
                     },
                     "404": {
                         "description": "Not found",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
+                            "$ref": "#/definitions/dto.ErrorResponseDTO"
                         }
                     },
                     "500": {
                         "description": "Internal server error",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
+                            "$ref": "#/definitions/dto.ErrorResponseDTO"
                         }
                     }
                 }
@@ -195,48 +165,33 @@ const docTemplate = `{
                         }
                     },
                     "400": {
-                        "description": "Bad request, invalid body",
+                        "description": "Bad request, invalid body or validation failed",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
+                            "$ref": "#/definitions/dto.ErrorResponseDTO"
                         }
                     },
                     "401": {
                         "description": "Unauthorized, verification failed",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
+                            "$ref": "#/definitions/dto.ErrorResponseDTO"
                         }
                     },
                     "403": {
                         "description": "Forbidden",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
+                            "$ref": "#/definitions/dto.ErrorResponseDTO"
                         }
                     },
                     "404": {
                         "description": "Not found",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
+                            "$ref": "#/definitions/dto.ErrorResponseDTO"
                         }
                     },
                     "500": {
                         "description": "Internal server error",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
+                            "$ref": "#/definitions/dto.ErrorResponseDTO"
                         }
                     }
                 }
@@ -262,7 +217,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object"
+                            "$ref": "#/definitions/dto.VerifyRequestDTO"
                         }
                     }
                 ],
@@ -274,48 +229,33 @@ const docTemplate = `{
                         }
                     },
                     "400": {
-                        "description": "Bad request, invalid body",
+                        "description": "Bad request, invalid body or validation failed",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
+                            "$ref": "#/definitions/dto.ErrorResponseDTO"
                         }
                     },
                     "401": {
                         "description": "Unauthorized, signature invalid",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
+                            "$ref": "#/definitions/dto.ErrorResponseDTO"
                         }
                     },
                     "403": {
                         "description": "Forbidden",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
+                            "$ref": "#/definitions/dto.ErrorResponseDTO"
                         }
                     },
                     "404": {
                         "description": "Not found",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
+                            "$ref": "#/definitions/dto.ErrorResponseDTO"
                         }
                     },
                     "500": {
                         "description": "Internal server error",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
+                            "$ref": "#/definitions/dto.ErrorResponseDTO"
                         }
                     }
                 }
@@ -353,48 +293,33 @@ const docTemplate = `{
                         }
                     },
                     "400": {
-                        "description": "Bad request, invalid body",
+                        "description": "Bad request, invalid body or validation failed",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
+                            "$ref": "#/definitions/dto.ErrorResponseDTO"
                         }
                     },
                     "401": {
                         "description": "Unauthorized, token invalid",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
+                            "$ref": "#/definitions/dto.ErrorResponseDTO"
                         }
                     },
                     "403": {
                         "description": "Forbidden",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
+                            "$ref": "#/definitions/dto.ErrorResponseDTO"
                         }
                     },
                     "404": {
                         "description": "Not found",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
+                            "$ref": "#/definitions/dto.ErrorResponseDTO"
                         }
                     },
                     "500": {
                         "description": "Internal server error",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
+                            "$ref": "#/definitions/dto.ErrorResponseDTO"
                         }
                     }
                 }
@@ -406,20 +331,33 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "challenge": {
-                    "type": "string",
-                    "example": "nonce1234567890"
+                    "description": "Unique challenge (nonce) to be signed by the user's TON wallet\nexample: nonce1234567890",
+                    "type": "string"
                 },
                 "client_id": {
-                    "type": "string",
-                    "example": "abc123def456"
+                    "description": "Client ID of the application requesting authorization\nexample: abc123def456",
+                    "type": "string"
                 },
                 "expiresAt": {
-                    "type": "string",
-                    "example": "2025-09-07T00:00:00Z"
+                    "description": "Expiration time of the challenge\nexample: 2025-09-07T00:00:00Z",
+                    "type": "string"
                 },
                 "redirect_uri": {
-                    "type": "string",
-                    "example": "https://example.com/callback"
+                    "description": "Redirect URI to which the user will be sent after authorization\nexample: https://example.com/callback",
+                    "type": "string"
+                }
+            }
+        },
+        "dto.ErrorResponseDTO": {
+            "type": "object",
+            "properties": {
+                "details": {
+                    "description": "Optional detailed information about the error\nexample: \"field 'redirect_uri' is required\"",
+                    "type": "string"
+                },
+                "error": {
+                    "description": "Short error message\nexample: Validation failed",
+                    "type": "string"
                 }
             }
         },
@@ -435,26 +373,32 @@ const docTemplate = `{
             ],
             "properties": {
                 "alg": {
+                    "description": "Algorithm\nrequired: true\nexample: RS256",
                     "type": "string",
                     "example": "RS256"
                 },
                 "e": {
+                    "description": "Exponent for RSA public key\nrequired: true\nexample: AQAB",
                     "type": "string",
                     "example": "AQAB"
                 },
                 "kid": {
+                    "description": "Key ID\nrequired: true\nexample: key1",
                     "type": "string",
                     "example": "key1"
                 },
                 "kty": {
+                    "description": "Key type\nrequired: true\nexample: RSA",
                     "type": "string",
                     "example": "RSA"
                 },
                 "n": {
+                    "description": "Modulus for RSA public key\nrequired: true\nexample: 0vx7agoebGcQSuuPiLJXZptNnP9Z...",
                     "type": "string",
                     "example": "0vx7agoebGcQSuuPiLJXZptNnP9Z..."
                 },
                 "use": {
+                    "description": "Intended use of the key\nrequired: true\nexample: sig",
                     "type": "string",
                     "example": "sig"
                 }
@@ -467,6 +411,7 @@ const docTemplate = `{
             ],
             "properties": {
                 "keys": {
+                    "description": "Array of JSON Web Keys\nrequired: true",
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/dto.JWK"
@@ -483,14 +428,17 @@ const docTemplate = `{
             ],
             "properties": {
                 "message": {
+                    "description": "Original message that was signed\nrequired: true\nexample: TON OAuth challenge message",
                     "type": "string",
                     "example": "TON OAuth challenge message"
                 },
                 "publicKey": {
+                    "description": "Public key of the TON wallet in base64 format\nrequired: true\nexample: dGVzdF9wdWJsaWNfa2V5X2RhdGE=",
                     "type": "string",
                     "example": "dGVzdF9wdWJsaWNfa2V5X2RhdGE="
                 },
                 "signature": {
+                    "description": "Signature of the message in base64 format\nrequired: true\nexample: c2lnbmF0dXJlX2RhdGFfYmFzZTY0X2Zvcm1hdA==",
                     "type": "string",
                     "example": "c2lnbmF0dXJlX2RhdGFfYmFzZTY0X2Zvcm1hdA=="
                 }
@@ -503,31 +451,40 @@ const docTemplate = `{
             ],
             "properties": {
                 "jwt": {
+                    "description": "JWT token issued after successful verification\nrequired: true\nexample: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9...",
                     "type": "string",
                     "example": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9..."
                 }
             }
         },
+        "dto.VerifyRequestDTO": {
+            "type": "object"
+        },
         "dto.VerifyResponseDTO": {
             "type": "object",
             "properties": {
                 "expiresAt": {
+                    "description": "Expiration timestamp of the verification\nrequired: true\nexample: 2025-09-07T00:00:00Z",
                     "type": "string",
                     "example": "2025-09-07T00:00:00Z"
                 },
                 "issuer": {
+                    "description": "Issuer of the verification\nrequired: true\nexample: TON OAuth Service",
                     "type": "string",
                     "example": "TON OAuth Service"
                 },
                 "nonce": {
+                    "description": "Nonce used in the signed message\nrequired: true\nexample: nonce1234567890",
                     "type": "string",
                     "example": "nonce1234567890"
                 },
                 "valid": {
+                    "description": "Indicates if the signature is valid\nrequired: true\nexample: true",
                     "type": "boolean",
                     "example": true
                 },
                 "wallet": {
+                    "description": "Wallet address of the signer\nrequired: true\nexample: EQC1234567890abcdef...",
                     "type": "string",
                     "example": "EQC1234567890abcdef..."
                 }
@@ -535,8 +492,12 @@ const docTemplate = `{
         },
         "dto.VerifyTokenRequestDTO": {
             "type": "object",
+            "required": [
+                "jwt"
+            ],
             "properties": {
                 "jwt": {
+                    "description": "JWT token string to verify\nrequired: true\nexample: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9...",
                     "type": "string",
                     "example": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9..."
                 }
@@ -546,14 +507,17 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "exp": {
+                    "description": "Expiration timestamp of the token (Unix time)\nrequired: true\nexample: 1751913600",
                     "type": "integer",
                     "example": 1751913600
                 },
                 "issuer": {
+                    "description": "Issuer of the JWT token\nrequired: true\nexample: TON OAuth Service",
                     "type": "string",
                     "example": "TON OAuth Service"
                 },
                 "valid": {
+                    "description": "Indicates if the token is valid\nrequired: true\nexample: true",
                     "type": "boolean",
                     "example": true
                 }

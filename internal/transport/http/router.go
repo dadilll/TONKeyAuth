@@ -5,6 +5,7 @@ import (
 	"TON/internal/handler"
 	"TON/internal/usecase"
 	"TON/pkg/logger"
+	"TON/pkg/tonwallet"
 	"TON/pkg/validator"
 	"crypto/rsa"
 	"time"
@@ -12,15 +13,15 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func SetupRoutes(e *echo.Echo, cfg *config.Config, log logger.Logger, privKey *rsa.PrivateKey, pubKey *rsa.PublicKey) {
+func SetupRoutes(e *echo.Echo, cfg *config.Config, log logger.Logger, privKey *rsa.PrivateKey, pubKey *rsa.PublicKey, tonwallet *tonwallet.WalletChecker) {
 
 	authorizeUC := usecase.NewAuthorizeUseCase(120, log)
-	verifyUC := usecase.NewVerifyUseCase(cfg.Issuer, 2*time.Minute, log)
+	verifyUC := usecase.NewVerifyUseCase(cfg.Issuer, 2*time.Minute, log, tonwallet)
 	tokenUC := usecase.NewTokenUseCase(cfg.Issuer, 5*time.Minute, privKey)
 	jwksUC := usecase.NewJWKSUseCase(cfg.KeyName, pubKey)
 	verifyTokenUC := usecase.NewTokenVerifyUseCase()
 
-	val := &validator.CustomValidator{}
+	val := validator.NewCustomValidator()
 
 	oauthHandler := handler.NewOauthHandler(
 		log,

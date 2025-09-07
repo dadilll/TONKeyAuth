@@ -3,6 +3,7 @@ package http
 import (
 	"TON/internal/config"
 	"TON/pkg/logger"
+	"TON/pkg/tonwallet"
 	"context"
 	"crypto/rsa"
 	"fmt"
@@ -18,10 +19,10 @@ import (
 	echoSwagger "github.com/swaggo/echo-swagger"
 )
 
-func New(logger logger.Logger, cfg *config.Config, privateKey *rsa.PrivateKey, publicKey *rsa.PublicKey) *echo.Echo {
+func New(logger logger.Logger, cfg *config.Config, privateKey *rsa.PrivateKey, publicKey *rsa.PublicKey, tonwallet *tonwallet.WalletChecker) *echo.Echo {
 	e := echo.New()
 	e.GET("/swagger/*", echoSwagger.WrapHandler)
-	SetupRoutes(e, cfg, logger, privateKey, publicKey)
+	SetupRoutes(e, cfg, logger, privateKey, publicKey, tonwallet)
 	return e
 }
 

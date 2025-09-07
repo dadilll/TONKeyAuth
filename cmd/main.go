@@ -3,12 +3,13 @@ package main
 import (
 	"TON/internal/config"
 	"TON/internal/transport/http"
+	"TON/pkg/jwt"
 	"TON/pkg/logger"
-	"TON/pkg/logger/jwt"
+	"TON/pkg/tonwallet"
 	"context"
 )
 
-const serviceName = "Auth_service"
+const serviceName = "TonOauthService"
 
 func main() {
 	ctx := context.Background()
@@ -31,7 +32,13 @@ func main() {
 		Logger.Error(ctx, "Error loaded private key: "+err.Error())
 	}
 
-	e := http.New(Logger, cfg, privateKey, publicKey)
+	checker, err := tonwallet.NewWalletChecker(ctx)
+	if err != nil {
+		Logger.Error(ctx, "Error init TON WalletChecker: "+err.Error())
+		return
+	}
+
+	e := http.New(Logger, cfg, privateKey, publicKey, checker)
 
 	httpServer := http.Start(e, Logger, cfg.HTTPServerPort)
 
