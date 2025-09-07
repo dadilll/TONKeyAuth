@@ -1,0 +1,425 @@
+definitions:
+  dto.AuthorizeResponseDTO:
+    properties:
+      challenge:
+        description: |-
+          Unique challenge (nonce) to be signed by the user's TON wallet
+          example: nonce1234567890
+        type: string
+      client_id:
+        description: |-
+          Client ID of the application requesting authorization
+          example: abc123def456
+        type: string
+      expiresAt:
+        description: |-
+          Expiration time of the challenge
+          example: 2025-09-07T00:00:00Z
+        type: string
+      redirect_uri:
+        description: |-
+          Redirect URI to which the user will be sent after authorization
+          example: https://example.com/callback
+        type: string
+    type: object
+  dto.ErrorResponseDTO:
+    properties:
+      details:
+        description: |-
+          Optional detailed information about the error
+          example: "field 'redirect_uri' is required"
+        type: string
+      error:
+        description: |-
+          Short error message
+          example: Validation failed
+        type: string
+    type: object
+  dto.JWK:
+    properties:
+      alg:
+        description: |-
+          Algorithm
+          required: true
+          example: RS256
+        example: RS256
+        type: string
+      e:
+        description: |-
+          Exponent for RSA public key
+          required: true
+          example: AQAB
+        example: AQAB
+        type: string
+      kid:
+        description: |-
+          Key ID
+          required: true
+          example: key1
+        example: key1
+        type: string
+      kty:
+        description: |-
+          Key type
+          required: true
+          example: RSA
+        example: RSA
+        type: string
+      "n":
+        description: |-
+          Modulus for RSA public key
+          required: true
+          example: 0vx7agoebGcQSuuPiLJXZptNnP9Z...
+        example: 0vx7agoebGcQSuuPiLJXZptNnP9Z...
+        type: string
+      use:
+        description: |-
+          Intended use of the key
+          required: true
+          example: sig
+        example: sig
+        type: string
+    required:
+    - alg
+    - e
+    - kid
+    - kty
+    - "n"
+    - use
+    type: object
+  dto.JWKSResponseDTO:
+    properties:
+      keys:
+        description: |-
+          Array of JSON Web Keys
+          required: true
+        items:
+          $ref: '#/definitions/dto.JWK'
+        type: array
+    required:
+    - keys
+    type: object
+  dto.TokenRequestDTO:
+    properties:
+      message:
+        description: |-
+          Original message that was signed
+          required: true
+          example: TON OAuth challenge message
+        example: TON OAuth challenge message
+        type: string
+      publicKey:
+        description: |-
+          Public key of the TON wallet in base64 format
+          required: true
+          example: dGVzdF9wdWJsaWNfa2V5X2RhdGE=
+        example: dGVzdF9wdWJsaWNfa2V5X2RhdGE=
+        type: string
+      signature:
+        description: |-
+          Signature of the message in base64 format
+          required: true
+          example: c2lnbmF0dXJlX2RhdGFfYmFzZTY0X2Zvcm1hdA==
+        example: c2lnbmF0dXJlX2RhdGFfYmFzZTY0X2Zvcm1hdA==
+        type: string
+    required:
+    - message
+    - publicKey
+    - signature
+    type: object
+  dto.TokenResponseDTO:
+    properties:
+      jwt:
+        description: |-
+          JWT token issued after successful verification
+          required: true
+          example: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9...
+        example: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9...
+        type: string
+    required:
+    - jwt
+    type: object
+  dto.VerifyRequestDTO:
+    type: object
+  dto.VerifyResponseDTO:
+    properties:
+      expiresAt:
+        description: |-
+          Expiration timestamp of the verification
+          required: true
+          example: 2025-09-07T00:00:00Z
+        example: "2025-09-07T00:00:00Z"
+        type: string
+      issuer:
+        description: |-
+          Issuer of the verification
+          required: true
+          example: TON OAuth Service
+        example: TON OAuth Service
+        type: string
+      nonce:
+        description: |-
+          Nonce used in the signed message
+          required: true
+          example: nonce1234567890
+        example: nonce1234567890
+        type: string
+      valid:
+        description: |-
+          Indicates if the signature is valid
+          required: true
+          example: true
+        example: true
+        type: boolean
+      wallet:
+        description: |-
+          Wallet address of the signer
+          required: true
+          example: EQC1234567890abcdef...
+        example: EQC1234567890abcdef...
+        type: string
+    type: object
+  dto.VerifyTokenRequestDTO:
+    properties:
+      jwt:
+        description: |-
+          JWT token string to verify
+          required: true
+          example: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9...
+        example: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9...
+        type: string
+    required:
+    - jwt
+    type: object
+  dto.VerifyTokenResponseDTO:
+    properties:
+      exp:
+        description: |-
+          Expiration timestamp of the token (Unix time)
+          required: true
+          example: 1751913600
+        example: 1751913600
+        type: integer
+      issuer:
+        description: |-
+          Issuer of the JWT token
+          required: true
+          example: TON OAuth Service
+        example: TON OAuth Service
+        type: string
+      valid:
+        description: |-
+          Indicates if the token is valid
+          required: true
+          example: true
+        example: true
+        type: boolean
+    type: object
+info:
+  contact: {}
+paths:
+  /oauth/authorize:
+    get:
+      consumes:
+      - application/json
+      description: Generate a one-time nonce for TON OAuth.
+      parameters:
+      - description: Redirect URI
+        in: query
+        name: redirect_uri
+        required: true
+        type: string
+      - description: Scope
+        in: query
+        name: scope
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.AuthorizeResponseDTO'
+        "400":
+          description: Validation failed
+          schema:
+            $ref: '#/definitions/dto.ErrorResponseDTO'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponseDTO'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/dto.ErrorResponseDTO'
+        "404":
+          description: Not found
+          schema:
+            $ref: '#/definitions/dto.ErrorResponseDTO'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponseDTO'
+      summary: Generate authorization challenge
+      tags:
+      - auth
+  /oauth/jwks:
+    get:
+      description: Get public keys to verify JWT tokens issued by TON OAuth.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.JWKSResponseDTO'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponseDTO'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/dto.ErrorResponseDTO'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/dto.ErrorResponseDTO'
+        "404":
+          description: Not found
+          schema:
+            $ref: '#/definitions/dto.ErrorResponseDTO'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponseDTO'
+      summary: Get JSON Web Key Set (JWKS)
+      tags:
+      - jwks
+  /oauth/token:
+    post:
+      consumes:
+      - application/json
+      description: Create JWT after successful verification of TON wallet.
+      parameters:
+      - description: Token request
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/dto.TokenRequestDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.TokenResponseDTO'
+        "400":
+          description: Bad request, invalid body or validation failed
+          schema:
+            $ref: '#/definitions/dto.ErrorResponseDTO'
+        "401":
+          description: Unauthorized, verification failed
+          schema:
+            $ref: '#/definitions/dto.ErrorResponseDTO'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/dto.ErrorResponseDTO'
+        "404":
+          description: Not found
+          schema:
+            $ref: '#/definitions/dto.ErrorResponseDTO'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponseDTO'
+      summary: Create JWT token
+      tags:
+      - auth
+  /oauth/verify:
+    post:
+      consumes:
+      - application/json
+      description: Verify signed message from TON wallet using ed25519.
+      parameters:
+      - description: Verify request
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/dto.VerifyRequestDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.VerifyResponseDTO'
+        "400":
+          description: Bad request, invalid body or validation failed
+          schema:
+            $ref: '#/definitions/dto.ErrorResponseDTO'
+        "401":
+          description: Unauthorized, signature invalid
+          schema:
+            $ref: '#/definitions/dto.ErrorResponseDTO'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/dto.ErrorResponseDTO'
+        "404":
+          description: Not found
+          schema:
+            $ref: '#/definitions/dto.ErrorResponseDTO'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponseDTO'
+      summary: Verify TON wallet signature
+      tags:
+      - auth
+  /oauth/verify-token:
+    post:
+      consumes:
+      - application/json
+      description: Verify JWT issued by TON OAuth service.
+      parameters:
+      - description: Token request
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/dto.VerifyTokenRequestDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.VerifyTokenResponseDTO'
+        "400":
+          description: Bad request, invalid body or validation failed
+          schema:
+            $ref: '#/definitions/dto.ErrorResponseDTO'
+        "401":
+          description: Unauthorized, token invalid
+          schema:
+            $ref: '#/definitions/dto.ErrorResponseDTO'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/dto.ErrorResponseDTO'
+        "404":
+          description: Not found
+          schema:
+            $ref: '#/definitions/dto.ErrorResponseDTO'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponseDTO'
+      summary: Verify JWT token
+      tags:
+      - auth
+swagger: "2.0"
