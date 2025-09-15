@@ -4,9 +4,6 @@
 
 **TON OAuth Service** is a project that enables secure user authentication through **TON wallets**. The project implements an OAuth-like authorization approach, using TON wallet signatures instead of passwords.
 
-> ⚠️ **Warning:** This project is still in an early stage of development. It is experimental and **should not be used in production**.
-
-
 ## ⚙️ Installation
 
 1. **Clone the repository**
