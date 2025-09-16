@@ -32,7 +32,9 @@ The service uses a configuration file to set up its parameters. The main setting
 - **PublicKeyPath** – path to the RSA public key used for verifying JWT tokens (e.g., `key/public.pem`).  
 - **HTTPServerPort** – port on which the service listens (e.g., `8080`).  
 - **Issuer** – the issuer name included in generated JWT tokens (e.g., `TON-OAUTH`).  
-- **KeyName** – name of the key used in JWKS responses (e.g., `main-key`).  
+- **KeyName** – name of the key used in JWKS responses (e.g., `main-key`).
+- **ApiKey** - Your personal API key for accessing **TonAPI**. This key is required for all requests to TonAPI endpoints, such as checking wallet status or retrieving wallet info. Keep it secret.
+- **ApiURL** - The base URL of the **TonAPI** service. Used to make HTTP requests for wallet verification and account information. (e.g., `https://tonapi.io`).
 
 ## 📄 API Documentation 
 
