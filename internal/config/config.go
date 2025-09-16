@@ -12,6 +12,8 @@ type Config struct {
 	PublicKeyPath  string `env:"PUBLIC_KEY_PATH" env-default:"key/public.pem"`
 	Issuer         string `env:"ISSUER" env-default:"TON-OAUTH"`
 	KeyName        string `env:"KEY_NAME" env-default:"main-key"`
+	ApiKey         string `env:"API_KEY" env-default:"api-key"`
+	ApiURL         string `env:"API_URL" env-default:"https://tonapi.io"`
 }
 
 func New() *Config {

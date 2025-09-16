@@ -5,7 +5,6 @@ import (
 	"TON/internal/transport/http"
 	"TON/pkg/jwt"
 	"TON/pkg/logger"
-	"TON/pkg/tonwallet"
 	"context"
 )
 
@@ -32,13 +31,7 @@ func main() {
 		Logger.Error(ctx, "Error loaded private key: "+err.Error())
 	}
 
-	checker, err := tonwallet.NewWalletChecker(ctx)
-	if err != nil {
-		Logger.Error(ctx, "Error init TON WalletChecker: "+err.Error())
-		return
-	}
-
-	e := http.New(Logger, cfg, privateKey, publicKey, checker)
+	e := http.New(Logger, cfg, privateKey, publicKey)
 
 	httpServer := http.Start(e, Logger, cfg.HTTPServerPort)
 
