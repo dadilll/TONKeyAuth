@@ -2,7 +2,8 @@
 
 ![TON OAuth](https://img.shields.io/badge/TON-OAuth-blue)
 
-**TON OAuth Service** is a project that enables secure user authentication through **TON wallets**. The project implements an OAuth-like authorization approach, using TON wallet signatures instead of passwords.
+**TON OAuth** Service is a **learning project** demonstrating secure user authentication via TON wallets.  
+The service implements an OAuth-like flow using TON wallet signatures instead of passwords.  
 
 ## ⚙️ Installation
 
